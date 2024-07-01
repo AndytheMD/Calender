@@ -6,6 +6,7 @@ let events = localStorage.getItem("events")
 
 const calendar = document.getElementById("calendar");
 const newEventModal = document.getElementById("newEventModal");
+const deleteEventModal = document.getElementById("deleteEventModal");
 const backDrop = document.getElementById("modalBackDrop");
 const eventTitleInput = document.getElementById("eventTitleInput");
 const weekdays = [
@@ -20,6 +21,19 @@ const weekdays = [
 
 function openModal(date) {
   clicked = date;
+
+  const eventForDay = events[clicked];
+
+  if (eventForDay && eventForDay.length > 0) {
+    document.getElementById("eventText").innerHTML = eventForDay
+      .map(
+        (event, index) =>
+          `<div>${event} <button onclick="deleteSpecificEvent(${index})">Delete</button></div>`
+      )
+      .join("");
+    deleteEventModal.style.display = "block";
+  }
+
   newEventModal.style.display = "block";
   backDrop.style.display = "block";
 }
@@ -68,21 +82,10 @@ function load() {
       }
 
       if (eventForDay) {
-        eventForDay.forEach((event, index) => {
+        eventForDay.forEach((event) => {
           const eventDiv = document.createElement("div");
           eventDiv.classList.add("event");
           eventDiv.innerText = event;
-          eventDiv.addEventListener("click", (e) => {
-            e.stopPropagation();
-            if (confirm("Do you want to delete this event?")) {
-              events[dayString].splice(index, 1);
-              if (events[dayString].length === 0) {
-                delete events[dayString];
-              }
-              localStorage.setItem("events", JSON.stringify(events));
-              load();
-            }
-          });
           daySquare.appendChild(eventDiv);
         });
       }
@@ -99,6 +102,7 @@ function load() {
 function closeModal() {
   eventTitleInput.classList.remove("error");
   newEventModal.style.display = "none";
+  deleteEventModal.style.display = "none";
   backDrop.style.display = "none";
   eventTitleInput.value = "";
   clicked = null;
@@ -114,11 +118,21 @@ function saveEvent() {
     }
 
     events[clicked].push(eventTitleInput.value);
-
     localStorage.setItem("events", JSON.stringify(events));
     closeModal();
   } else {
     eventTitleInput.classList.add("error");
+  }
+}
+
+function deleteSpecificEvent(index) {
+  if (events[clicked]) {
+    events[clicked].splice(index, 1);
+    if (events[clicked].length === 0) {
+      delete events[clicked];
+    }
+    localStorage.setItem("events", JSON.stringify(events));
+    closeModal();
   }
 }
 
@@ -135,6 +149,7 @@ function initButtons() {
 
   document.getElementById("saveButton").addEventListener("click", saveEvent);
   document.getElementById("cancelButton").addEventListener("click", closeModal);
+  document.getElementById("closeButton").addEventListener("click", closeModal);
 }
 
 initButtons();

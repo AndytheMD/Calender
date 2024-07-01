@@ -3,6 +3,7 @@ body {
   margin-top: 50px;
   justify-content: center;
   background-color: #fffcff;
+  position: relative; /* Add this to position the delete modal relative to the body */
 }
 button {
   width: 75px;
@@ -27,7 +28,7 @@ button {
   background-color: #92a1d1;
 }
 #container {
-  width: 770px;
+  width: 1470px;
 }
 #weekdays {
   width: 100%;
@@ -35,7 +36,7 @@ button {
   color: #247ba0;
 }
 #weekdays div {
-  width: 100px;
+  width: 250px;
   padding: 10px;
 }
 #calendar {
@@ -45,7 +46,7 @@ button {
   flex-wrap: wrap;
 }
 .day {
-  width: 100px;
+  width: 200px;
   padding: 10px;
   height: 100px;
   cursor: pointer;
@@ -87,11 +88,22 @@ button {
   box-shadow: 0px 0px 3px black;
   border-radius: 5px;
   width: 350px;
-  top: 100px;
-  left: calc(50% - 175px);
   position: absolute;
   font-family: sans-serif;
 }
+
+#newEventModal {
+  top: 100px;
+  left: calc(50% - 175px);
+}
+
+#deleteEventModal {
+  top: 100px;
+  left: calc(
+    40% + 400px
+  ); /* Adjust this value as needed to position it to the side */
+}
+
 #eventTitleInput {
   padding: 10px;
   width: 100%;
